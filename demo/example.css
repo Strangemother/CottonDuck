@@ -1,0 +1,9 @@
+.buttons button {
+border: none;
+font-size: 12px;
+padding: 6px 17px;
+box-shadow: 0px 2px 1px -1px rgba(1,1,1,.8);
+background: #808080;
+color: #fff;
+text-transform: uppercase;
+}
