@@ -9,13 +9,22 @@
 	+ Add core assets
 	+ Get
  */
+	/* Pick up the last script booted (me) */
+
 ;(function(config){
 	'use strict'
+
+	var scripts = document.getElementsByTagName("script");
+	// Parse the special data to configure Cotton.
+	var script = scripts[scripts.length - 1];
 
 	var listen = window['addEventListener'] ? window.addEventListener: window.attachEvent
 		, core
 		, spindle
 		, utils
+		, assets = [
+			'components/cotton.canvas.js'
+		]
 		;
 
 	var main = function(){
@@ -30,15 +39,23 @@
 			detail: { name: config.name }
 		});
 
+
 		window.dispatchEvent(event);
 
 	}
 
 	var run = function() {
+		liveloadAssets()
 		core.setConfig(config)
 	 	core.ready(ready);
 	 	core.init()
 	};
+
+	var liveloadAssets = function(){
+		core.relativeLoad(script, assets, function(){
+			console.log('live loaded')
+		})
+	}
 
 	var ready = function(){
 	 	console.log('Cotton', config.name);
