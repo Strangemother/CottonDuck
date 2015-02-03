@@ -694,7 +694,18 @@ Options can be passed through HTML data attributes of the running script tag.
 		 */
 		utils.addEvent(name + ':get', function(event){
 			if(event.detail && event.detail.name ) {
-				spindle.dispatchEvent(name + ':' + event.detail.name)
+				if( event.detail.space !== undefined ) {
+					if(event.detail.space === true) {
+						namespace[event.detail.name] = {
+							name: event.detail.name
+						};
+					} else {
+						namespace[event.detail.space] = {
+							name: event.detail.name
+						}
+					}
+				}
+				spindle.dispatchEvent(name + ':' + event.detail.name);
 			} else {
 				spindle.dispatchEvent(name)
 			}

@@ -5,6 +5,7 @@
 		, core
 		, spindle
 		, utils
+		, space
 		;
 
 	var main = function(){
@@ -12,6 +13,7 @@
 			core = event.detail.namespace;
 			spindle = event.detail.spindle;
 			utils = event.detail.utls;
+			space = core[config.space]
 			run();
 		});
 
@@ -26,6 +28,7 @@
 			new CustomEvent('spindle:get', {
 				detail: {
 					name: config.name
+					, space: config.space
 				}
 			})
 		);
@@ -35,11 +38,11 @@
 		// hook code
 		core.path = StrTools.path
 
-	 	core.load = function(){
+	 	space.load = function(){
 	 		return ljs.load.apply(ljs, arguments)
 	 	}
 
-	 	core.aliasLoad = function(){
+	 	space.aliasLoad = function(){
 	 		return ljs.load.apply(ljs, arguments)
 	 	}
 
@@ -55,7 +58,7 @@
 		 	relativeLoad(script, 'components/cotton.canvas.js')
 		 	// ../src/cotton/cotton.canvas.js
 	 	 */
-	 	core.relativeLoad = function(script, assets, callback) {
+	 	space.relativeLoad = function(script, assets, callback) {
 	 		var path = script;
 	 		var liveLoad;
 
@@ -83,7 +86,7 @@
 	 		}
 
 	 		// strip end file
-	 		return core.load(liveLoad, callback)
+	 		return space.load(liveLoad, callback)
 	 		// loop assets
 	 		// prepend file path
 	 	}
@@ -261,5 +264,6 @@
    main();
 }).call(window, {
 	name: 'plugin'
+	, space: 'load'
 })
 

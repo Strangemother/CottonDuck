@@ -52,7 +52,7 @@
 	};
 
 	var liveloadAssets = function(){
-		core.relativeLoad(script, assets, function(){
+		core.load.relativeLoad(script, assets, function(){
 			console.log('live loaded')
 		})
 	}
