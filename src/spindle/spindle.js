@@ -170,13 +170,49 @@ Options can be passed through HTML data attributes of the running script tag.
 
 		// only auto build is allowed to boot initially.
 		if( configuration.build && !namespace.building ) {
-			// build and execute.
-			utils.build( _window, config);
-			utils.execute(/* configuration */);
+
+			utils.boot(_window, config)
 		}
 
 		return namespace
 	};
+
+	utils.boot = function(wind, conf){
+		// perform init sequence, if the bootup is ready, else safely delay
+		// init() execution until ready.
+		var load = true;
+		if (spindle.booted == true) {
+			return true;
+		};
+
+		for (var booting in spindle.bootups) {
+			if (spindle.bootups.hasOwnProperty(booting)) {
+				var b = spindle.bootups[booting];
+				if(b.loaded === false) {
+					// no load
+					load = false;
+				};
+
+			}
+		}
+
+		var boot = function(){
+			// build and execute.
+			spindle.booted = true;
+			utils.build( wind, conf);
+			utils.execute(/* configuration */);
+		}
+
+		if(load) {
+			delete spindle.tryBoot;
+			return boot()
+		} else {
+
+			console.log('tried to boot early')
+			spindle.tryBoot = true;
+			return spindle.booted = false;
+		}
+	}
 
 	/*
 	 Initialize the builder tool; generating the namespace object and
@@ -202,9 +238,11 @@ Options can be passed through HTML data attributes of the running script tag.
 		 */
 		config.parent = (config.parent === null || config.parent === undefined) ? parent: config.parent;
 
-		// push the namespace into the parent; defined as
-		// the namespace string provided.
-		config.parent[config.namespace] = namespace;
+		if(parent){
+			// push the namespace into the parent; defined as
+			// the namespace string provided.
+			config.parent[config.namespace] = namespace;
+		}
 
 		// write the name into the namespace.
 		namespace['namespace'] = config.namespace;
@@ -234,6 +272,7 @@ Options can be passed through HTML data attributes of the running script tag.
 			utils.listenOn('cleanup', utils.cleanup);
 			utils.dispatchFrameworkEvent('cleanup')
 		};
+		return true;
 	};
 
 	utils.waitOnExecute = function waitOnExecute(conf) {
@@ -551,7 +590,11 @@ Options can be passed through HTML data attributes of the running script tag.
 		var _Cotton = e.detail[space];
 
 		// Should never need to start the Framework again
-		delete _Cotton.init;
+		_Cotton.init = function(){
+			// Inert the connected function, calling is late does
+			// nothing.
+			return true
+		};
 		// The fact the framework has built is self evident.
 		// A quacking duck does not need to prove it is a duck.
 		delete _Cotton.inited;
@@ -662,6 +705,7 @@ Options can be passed through HTML data attributes of the running script tag.
 			// console.log('Ready wait?', callbacks)
 			// add a listener for the ready event, this only occurs once.
 			utils.addEvent('*:ready', function(event) {
+				console.log('ready event heard')
 				// Loop the entire list of callbacks, calling each one - passing
 				// Cotton
 				for (var i = readyCallbacks.length - 1; i >= 0; i--) {
@@ -671,7 +715,8 @@ Options can be passed through HTML data attributes of the running script tag.
 			});
 
 			readyCallbacks=[];
-		}
+		};
+
 		readyCallbacks.push(func);
 	}
 
@@ -692,24 +737,82 @@ Options can be passed through HTML data attributes of the running script tag.
 		 	)
 
 		 */
-		utils.addEvent(name + ':get', function(event){
-			if(event.detail && event.detail.name ) {
-				if( event.detail.space !== undefined ) {
-					if(event.detail.space === true) {
-						namespace[event.detail.name] = {
-							name: event.detail.name
-						};
-					} else {
-						namespace[event.detail.space] = {
-							name: event.detail.name
-						}
+
+		utils.addEvent(name + ':get', spindle.handleGetEvent)
+	}
+
+	spindle.handleGetEvent = function(event){
+		console.log('getevent', event.detail)
+		spindle.handleEvent(event);
+	}
+
+	spindle.bootups = {}
+	spindle.bootLoad = function(name) {
+		if(spindle.bootups[name] !== undefined) {
+			// Already in boot process
+			return false
+		}
+
+		var d = {
+			loaded: false
+			, name: name
+			, done: (function(){
+				return function(){
+					console.log('done', name)
+					spindle.bootDone(name)
+				}
+			}).apply({
+				name: name
+			})
+		};
+		spindle.bootups[name] = d
+		console.log('bootLoaded:', name)
+		return d
+	};
+
+	spindle.bootDone = function(name){
+		// try boot if tryBoot is true
+		console.log('Spindle.bootDone', name)
+		var buo = spindle.bootups[name];
+		if(buo && buo.loaded === false) {
+			console.log('Boot up load', name)
+			delete spindle.bootups[name];
+		}
+
+		if( spindle.tryBoot ) {
+			utils.boot()
+		}
+	}
+
+	spindle.handleEvent = function(event){
+		var c = namespace.getConfig()
+		var name = c.namespace.toLowerCase();
+
+		if(event.detail && event.detail.name ) {
+			d = event.detail
+			if( d.space !== undefined ) {
+				if(d.space === true) {
+					namespace[d.name] = {
+						name: d.name
+					};
+				} else {
+					namespace[d.space] = {
+						name: d.name
 					}
 				}
-				spindle.dispatchEvent(name + ':' + event.detail.name);
-			} else {
-				spindle.dispatchEvent(name)
 			}
-		})
+
+			if(d.preboot == true) {
+				// delay startup
+				console.log('configure booter', d.name)
+				spindle.bootups[d.name] = spindle.bootLoad(d.name)
+			};
+			var n = name + ':' + d.name;
+			console.log('dispatch', n)
+			spindle.dispatchEvent(n);
+		} else {
+			spindle.dispatchEvent(name)
+		}
 	}
 
 	spindle.getScript = function(){

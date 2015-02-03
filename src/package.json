@@ -1,0 +1,24 @@
+{
+  "name": "cottonduck",
+  "version": "0.0.1",
+  "description": "wrapper for the canvas",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github/strangemother/cottonduck"
+  },
+  "keywords": [
+    "canvas"
+  ],
+  "author": "Jay Jagpal",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-copy": "~0.7.0",
+    "grunt-contrib-concat": "~0.5.0",
+    "grunt-contrib-uglify": "~0.7.0"
+  }
+}

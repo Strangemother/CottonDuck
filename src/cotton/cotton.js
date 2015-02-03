@@ -19,6 +19,7 @@
 	var script = scripts[scripts.length - 1];
 
 	var listen = window['addEventListener'] ? window.addEventListener: window.attachEvent
+		, readys =[], draws = []
 		, core
 		, spindle
 		, utils
@@ -27,6 +28,23 @@
 		]
 		;
 
+  	var Head = function(){
+  		var init = function(){
+  			this.startUp = +(new Date)
+  		};
+
+  		this.ready = function(func) {
+  			console.log('add ready')
+  			readys.push(func);
+  		};
+
+  		this.draw = function(func) {
+  			draws.push(arguments)
+  		};
+
+  		init.apply(this, arguments)
+  	}
+
 	var main = function(){
 		listen('spindle:' + config.name, function(event){
 			core = event.detail.namespace;
@@ -34,7 +52,7 @@
 			utils = event.detail.utils;
 			run();
 		});
-
+		head();
 		var event = new CustomEvent('spindle:get', {
 			detail: { name: config.name }
 		});
@@ -44,21 +62,43 @@
 
 	}
 
+	var head = function() {
+		/*
+		 write the initial config object specfic to the custom library. This
+		 applies something to hook to if the library is referenced before the boot
+		 is finished.
+		 */
+		 if(!window[config.name]) {
+		 	console.log('write pre head');
+		 	window[config.name] = new Head()
+		 }
+	}
+
 	var run = function() {
 		liveloadAssets()
 		core.setConfig(config)
 	 	core.ready(ready);
-	 	core.init()
 	};
 
 	var liveloadAssets = function(){
 		core.load.relativeLoad(script, assets, function(){
 			console.log('live loaded')
+			core.init()
 		})
 	}
 
 	var ready = function(){
-	 	console.log('Cotton', config.name);
+	 	console.log('Cotton.js heard ready under name:', config.name);
+	 	Head.prototype.ready = core.ready
+	 	for (var i = readys.length - 1; i >= 0; i--) {
+	 		console.log('push readys')
+	 		core.ready(readys[i])
+	 	};
+
+	 	for (var i = draws.length - 1; i >= 0; i--) {
+	 		console.log('push draws')
+	 		core.canvas.draw.apply(core.canvas, draws[i])
+	 	};
 	}
 
 	main();

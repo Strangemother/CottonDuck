@@ -20,7 +20,7 @@
 	}
 
 	var ready = function(){
-	 	console.log('Ready', config.name);
+	 	console.log('Im good to go', config.name);
 	}
 
 	/**
@@ -36,7 +36,14 @@
 	 * @return {[type]}      [description]
 	 */
 	var draw = function(canvas, draw) {
-		var cnv = create(canvas, draw);
+		var f = draw;
+		if( arguments.length == 1
+			&& it(canvas).is('function') ) {
+			f = canvas;
+			canvas = undefined;
+		};
+
+		var cnv = create(canvas, f);
 		cnv.animFrame.loop()
 		return cnv
 	}
@@ -47,8 +54,7 @@
 		 canvas with CottonDuck
 		 */
 		var insp = inspectCanvas(canvas);
-		insp.createTime = +(new Date);
-		insp.animFrame = animFrame(callback);
+		insp.animFrame = animFrame(insp.context, callback);
 		return insp;
 	}
 
@@ -116,7 +122,7 @@
 		return canvas;
 	}
 
-	var animFrame = function(callback){
+	var animFrame = function(context, callback){
 		var renderFunction = function(){};
 		var run = true;
 		var r = {
@@ -125,6 +131,7 @@
 			, run: run
 			, start: undefined
 			, stop: undefined
+			, context: context
 		}
 
 		r.render = function render(callback){
@@ -132,6 +139,10 @@
 
 			return renderFunction;
 		};
+
+		r.frame = function frame() {
+			renderFunction(r.context)
+		}
 
 		var browserAnimationFrame = (function(){
 		  	return  window.requestAnimationFrame     ||
@@ -145,9 +156,10 @@
 		})();
 
 		r.loop = function() {
+			r.createTime = +(new Date);
 		    var _loop = function(){
 		        (function animloop(){
-		            renderFunction()
+		            r.frame()
 		            r.run && browserAnimationFrame(animloop);
 		        })();
 		    };
@@ -178,24 +190,24 @@
 
 	var main = (function(){
 
-		listen('spindle:' + config.name, function(event){
+		listen('cotton:' + config.name, function(event){
 			core 	= event.detail.namespace;
 			spindle = event.detail.spindle;
 			utils 	= event.detail.utils;
 			space   = core[config.name];
-
+			console.log('canvas ligbot response')
 	 		self.core = core
 	 		self.spindle = spindle
 	 		self.utils = utils
 	 		setup()
 	 		core.ready(ready);
+	 		spindle.bootups[config.name].done()
+
 		});
 
+		console.log('canvas lisbend request')
 		window.dispatchEvent(new CustomEvent('spindle:get', {
-			detail: {
-				name: config.name
-				, space: true
-			}
+			detail: config
 		}));
 
 	}).call(this);
@@ -203,4 +215,6 @@
 
 }).call(window, {
 	name: 'canvas'
+	, space: true
+	, preboot: true
 })
