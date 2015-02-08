@@ -11,7 +11,7 @@ grunt.initConfig({
                     expand: true
                     , cwd: 'src/cotton/vendor/required/'
                     , src: ['**']
-                    , dest: 'dist/vendor/'
+                    , dest: '../dist/vendor/'
                 }
             ]
         },
@@ -28,7 +28,7 @@ grunt.initConfig({
                 'spindle/spindle.js'
                 , 'spindle/spindle-plugin.js'
             ]
-            , dest: 'dist/uncompressed/spindle.js'
+            , dest: '../dist/uncompressed/spindle.js'
         }
 
         , cottonCanvas: {
@@ -37,7 +37,7 @@ grunt.initConfig({
                 , 'cotton/cotton.js'
                 , 'cotton/components/cotton.canvas.js'
             ]
-            , dest: 'dist/uncompressed/cotton-canvas.js'
+            , dest: '../dist/uncompressed/cotton-canvas.js'
         }
 
         , vendor: {
@@ -45,7 +45,7 @@ grunt.initConfig({
                 'cotton/vendor/it.js'
                 , 'cotton/vendor/ljs/l.js'
             ]
-            , dest: 'dist/uncompressed/vendor.js'
+            , dest: '../dist/uncompressed/vendor.js'
         }
 
 
@@ -58,11 +58,11 @@ grunt.initConfig({
 
         , dist: {
             files: {
-                'dist/min/spindle.min.js': [
+                '../dist/min/spindle.min.js': [
                     '<%= concat.vendor.dest %>'
                     , '<%= concat.spindle.dest %>'
                 ]
-                , 'dist/min/cotton-canvas.min.js': [
+                , '../dist/min/cotton-canvas.min.js': [
                     '<%= concat.vendor.dest %>'
                     , '<%= concat.spindle.dest %>'
                     , '<%= concat.cottonCanvas.dest %>'

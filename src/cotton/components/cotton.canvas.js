@@ -20,6 +20,7 @@
 	}
 
 	var ready = function(){
+		utils.dispatchEvent('canvas:ready')
 	 	console.log('Im good to go', config.name);
 	}
 
@@ -159,8 +160,8 @@
 			r.createTime = +(new Date);
 		    var _loop = function(){
 		        (function animloop(){
-		            r.frame()
 		            r.run && browserAnimationFrame(animloop);
+		            r.frame()
 		        })();
 		    };
 		    _loop();

@@ -25,6 +25,7 @@
 		, utils
 		, assets = [
 			'components/cotton.canvas.js'
+			, 'components/cotton.layers.js'
 		]
 		;
 

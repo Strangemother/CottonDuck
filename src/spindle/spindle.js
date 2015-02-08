@@ -35,6 +35,13 @@ Options can be passed through HTML data attributes of the running script tag.
   	var utils = {};
   	var spindle = {};
 
+	window.log = function(){
+	  log.history = log.history || [];   // store logs to an array for reference
+	  log.history.push(arguments);
+	  if(this.console){
+	    // console.log( Array.prototype.slice.call(arguments) );
+	  }
+	};
   	utils.sprintf = (function(){
   		var s = _w['sprintf'] || window['sprintf'];
   		return s;
@@ -54,7 +61,7 @@ Options can be passed through HTML data attributes of the running script tag.
   			, retEvs 	= []
   			;
 
-  		// console.log("addEvent", name);
+  		// log("addEvent", name);
   		if( !it(name).is('array') ) {
   			name = [name]
   		}
@@ -80,7 +87,7 @@ Options can be passed through HTML data attributes of the running script tag.
 
   		for (var i = name.length - 1; i >= 0; i--) {
   			var _name = name[i];
-  			// console.log('dispatchEvent', _name);
+  			// log('dispatchEvent', _name);
 	  		try {
 				ev = new CustomEvent(_name, data);
 				_w.dispatchEvent( ev );
@@ -94,7 +101,7 @@ Options can be passed through HTML data attributes of the running script tag.
   		listener = listener || utils.eventReceiver;
 
 		p.removeEventListener(eventName, listener, true, true)
-  		// console.log('removeEvent', eventName)
+  		// log('removeEvent', eventName)
   	};
 
   	utils.randomString = function(){
@@ -161,7 +168,7 @@ Options can be passed through HTML data attributes of the running script tag.
 		_window = _window || _w;
 		var config = utils.extend({}, _c,  conf || {});
 
-		console.log("Spin " + config.namespace);
+		log("Spin " + config.namespace);
 
 		// pick up the initial config object and store it locally.
 		configuration = namespace.getConfig(config);
@@ -199,7 +206,7 @@ Options can be passed through HTML data attributes of the running script tag.
 		var boot = function(){
 			// build and execute.
 			spindle.booted = true;
-			utils.build( wind, conf);
+			utils.build( window, conf);
 			utils.execute(/* configuration */);
 		}
 
@@ -208,7 +215,7 @@ Options can be passed through HTML data attributes of the running script tag.
 			return boot()
 		} else {
 
-			console.log('tried to boot early')
+			log('tried to boot early')
 			spindle.tryBoot = true;
 			return spindle.booted = false;
 		}
@@ -232,12 +239,11 @@ Options can be passed through HTML data attributes of the running script tag.
 
 		var config = utils.extend(configuration, conf);
 
-		// console.log('Build Cotton');
+		// log('Build Cotton');
 		/*
 		It's okay to push this back into the parent as it's null.
 		 */
 		config.parent = (config.parent === null || config.parent === undefined) ? parent: config.parent;
-
 		if(parent){
 			// push the namespace into the parent; defined as
 			// the namespace string provided.
@@ -299,7 +305,7 @@ Options can be passed through HTML data attributes of the running script tag.
 				namespace.execute( config )
 			};
 
-			console.log("waitOn execution took place", prop);
+			log("waitOn execution took place", prop);
 			var originalPropVal = namespace[prop].apply(scope, arguments);
 			// Now reapply the very original once the
 			// waitOn has occured.
@@ -310,7 +316,7 @@ Options can be passed through HTML data attributes of the running script tag.
 			if( c.hasOwnProperty(prop) ) {
 				v = c[prop];
 				originalFunction = namespace[prop];
-				console.log('wait on', v, namespace);
+				log('wait on', v, namespace);
 				namespace[prop] = injectFunction;
 			}
 		}
@@ -318,7 +324,7 @@ Options can be passed through HTML data attributes of the running script tag.
 
   	utils.eventReceiver = function(ev, listener, useCapture, wasUntrusted) {
 		// this listens to the same event, ensuring it's run.
-		// console.log("Internal Event", ev.type);
+		// log("Internal Event", ev.type);
 		utils.removeEvent(ev.type, utils.eventReceiver);
   	};
 
@@ -414,7 +420,7 @@ Options can be passed through HTML data attributes of the running script tag.
   				 Proceed with the auto execute. If the user wanted to stop the boot.
   				 They should have defined it by now.
   				 */
-  				console.log('Auto execute.');
+  				log('Auto execute.');
   				namespace.execute()
   			};
   		} else {
@@ -425,7 +431,7 @@ Options can be passed through HTML data attributes of the running script tag.
   	};
 
   	utils.rootImplement = function(name, chainMethod, conf) {
-		// console.log('Implementing', name);
+		// log('Implementing', name);
 		// Execute the chain method
 		if(conf !== undefined) configuration = utils.extend(configuration, conf);
 		var scope = new utils.chainScope(name, chainMethod, conf);
@@ -702,16 +708,20 @@ Options can be passed through HTML data attributes of the running script tag.
 		}
 
 		if( !readyCallbacks ) {
-			// console.log('Ready wait?', callbacks)
+			// log('Ready wait?', callbacks)
 			// add a listener for the ready event, this only occurs once.
 			utils.addEvent('*:ready', function(event) {
-				console.log('ready event heard')
+				log('ready event heard')
 				// Loop the entire list of callbacks, calling each one - passing
 				// Cotton
-				for (var i = readyCallbacks.length - 1; i >= 0; i--) {
-					var cb = readyCallbacks[i];
-					cb( namespace );
+				for (var i = 0; i < readyCallbacks.length; i++) {
+					readyCallbacks[i](namespace)
 				};
+				//
+				// for (var i = readyCallbacks.length - 1; i >= 0; i--) {
+				// 	var cb = readyCallbacks[i];
+				// 	cb( namespace );
+				// };
 			});
 
 			readyCallbacks=[];
@@ -742,7 +752,7 @@ Options can be passed through HTML data attributes of the running script tag.
 	}
 
 	spindle.handleGetEvent = function(event){
-		console.log('getevent', event.detail)
+		log('getevent', event.detail)
 		spindle.handleEvent(event);
 	}
 
@@ -758,7 +768,7 @@ Options can be passed through HTML data attributes of the running script tag.
 			, name: name
 			, done: (function(){
 				return function(){
-					console.log('done', name)
+					log('done', name)
 					spindle.bootDone(name)
 				}
 			}).apply({
@@ -766,16 +776,16 @@ Options can be passed through HTML data attributes of the running script tag.
 			})
 		};
 		spindle.bootups[name] = d
-		console.log('bootLoaded:', name)
+		log('bootLoaded:', name)
 		return d
 	};
 
 	spindle.bootDone = function(name){
 		// try boot if tryBoot is true
-		console.log('Spindle.bootDone', name)
+		log('Spindle.bootDone', name)
 		var buo = spindle.bootups[name];
 		if(buo && buo.loaded === false) {
-			console.log('Boot up load', name)
+			log('Boot up load', name)
 			delete spindle.bootups[name];
 		}
 
@@ -804,11 +814,11 @@ Options can be passed through HTML data attributes of the running script tag.
 
 			if(d.preboot == true) {
 				// delay startup
-				console.log('configure booter', d.name)
+				log('configure booter', d.name)
 				spindle.bootups[d.name] = spindle.bootLoad(d.name)
 			};
 			var n = name + ':' + d.name;
-			console.log('dispatch', n)
+			log('dispatch', n)
 			spindle.dispatchEvent(n);
 		} else {
 			spindle.dispatchEvent(name)
@@ -889,7 +899,7 @@ Options can be passed through HTML data attributes of the running script tag.
 		 this entity is in the namespace but is not booted.
 		 As such it's definedas a preCotton - not executed.
 		 */
-		console.log("readyhook", Spindle);
+		log("readyhook", Spindle);
 		window.Sp = Spindle
 
 		if( Spindle.getConfig('build') ) {
@@ -1029,7 +1039,7 @@ Options can be passed through HTML data attributes of the running script tag.
 		func = function eventWrap(/* ... */) {
 			// var args = Array.prototype.slice.call(arguments);
 			v = orig.apply(scope, arguments);
-			console.log('call', name)
+			log('call', name)
 			namespace.events.dispatch(name, arguments);
 			return v;
 		}

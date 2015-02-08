@@ -38,12 +38,12 @@
 		// hook code
 		core.path = StrTools.path
 
-	 	space.load = function(){
-	 		return ljs.load.apply(ljs, arguments)
+	 	space.load = function(assets, cb){
+	 		return ljs.load(assets,cb)
 	 	}
 
-	 	space.aliasLoad = function(){
-	 		return ljs.load.apply(ljs, arguments)
+	 	space.aliasLoad = function(assets, cb){
+	 		return ljs.load(assets,cb)
 	 	}
 
 	 	/*
@@ -68,26 +68,29 @@
 	 		}//else if( it(script).is('string') ) {
 	 			//path = script;
 	 		//}
-
+	 		if( it(assets).is('string') ) {
+	 			assets = [assets]
+	 		}
+	 		var ats = assets.slice(0)
 	 		// get path
-	 		var ia = it(assets);
+	 		var ia = it(ats);
 	 		var dn = core.path.dirname(path);
 
 	 		if( ia.is('string') ) {
-	 			var uri = core.path.join([dn, assets ])
+	 			var uri = core.path.join([dn, ats ])
 	 			liveLoad = uri
 	 		}
 
 	 		if( ia.is('array') ) {
-	 			for (var i = assets.length - 1; i >= 0; i--) {
-	 				assets[i] = core.path.join(dn, assets[i])
+	 			for (var i = ats.length - 1; i >= 0; i--) {
+	 				ats[i] = core.path.join(dn, ats[i])
 	 			};
-	 			liveLoad = assets;
+	 			liveLoad = ats;
 	 		}
 
 	 		// strip end file
 	 		return space.load(liveLoad, callback)
-	 		// loop assets
+	 		// loop ats
 	 		// prepend file path
 	 	}
 
