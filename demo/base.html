@@ -6,8 +6,11 @@
   <title>{% block title %}Cotton Duck{% endblock %}</title>
 
   <!-- CSS  -->
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  {% block header_css %}
+  <link href="/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/css/styles/default.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  {% endblock %}
 </head>
 <body>
   <nav class="blue accent-2" role="navigation">
@@ -121,8 +124,10 @@
     {% block footer_js %}
       <!--  Scripts-->
       <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      <script src="js/materialize.js"></script>
-      <script src="js/init.js"></script>
+      <script src="/js/vendor/materialize.js"></script>
+      <script src="/js/init.js"></script>
+      <script src="/js/vendor/highlight.pack.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script>
     {% endblock %}
 
   </body>
