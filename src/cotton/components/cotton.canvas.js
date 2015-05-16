@@ -15,13 +15,21 @@
 		space.inspectCanvas = inspectCanvas;
 		space.getCanvas = getCanvas;
 		space.animFrame = animFrame;
-
+		space.calcWidth = calcWidth;
+		
 	 	console.log('Setup', config.name);
 	}
 
-	var ready = function(){
+	var ready = function(cotton){
 		utils.dispatchEvent('canvas:ready')
+		calcWidth(cotton.canvas.getCanvas() )
 	 	console.log('Im good to go', config.name);
+	}
+
+	var calcWidth = function(canvas){
+		var inp = inspectCanvas(canvas);
+		inp.canvas.width = inp.canvas.clientWidth * inp.devicePixelRatio;
+		inp.canvas.height = inp.canvas.clientHeight * inp.devicePixelRatio;
 	}
 
 	/**
@@ -63,11 +71,10 @@
 
 		var cnv = getCanvas(canvas);
 		var dpr = window.devicePixelRatio || 1;
-
 		var ret = {
 			context: undefined
 			, canvas: cnv
-			, width:0
+			, width:  0
 			, height: 0
 			, devicePixelRatio: dpr
 		};
@@ -146,7 +153,7 @@
 		}
 
 		var browserAnimationFrame = (function(){
-		  	return  window.requestAnimationFrame     ||
+		  	return window.requestAnimationFrame      ||
 		          window.webkitRequestAnimationFrame ||
 		          window.mozRequestAnimationFrame    ||
 		          window.oRequestAnimationFrame      ||
@@ -206,7 +213,10 @@
 
 		});
 
-		console.log('canvas lisbend request')
+		listen('resize', function(){
+			calcWidth(cotton.canvas.getCanvas())
+		})
+		console.log('canvas listen request')
 		window.dispatchEvent(new CustomEvent('spindle:get', {
 			detail: config
 		}));
