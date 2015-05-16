@@ -2,7 +2,7 @@ console.log('NullPoint ready')
 cotton.ready(function(){
 
 	// new cotton.duck.objects.NullPoint(10,10)
-	cotton.duck.item('NullPoint', function(){
+	var NullPoint = cotton.duck.item('NullPoint', function(){
 		console.log('null point')
 		return {
 			__extends: [cotton.duck.Duck]
@@ -40,6 +40,9 @@ cotton.ready(function(){
 			, setXY: function(arr) {
 				this.x = arr[0]
 				this.y = arr[1]
+			}
+			, copy: function(){
+				return new this.constructor(this.x, this.y)
 			}
 		}
 	});
