@@ -1,8 +1,11 @@
+;(function(){
+	'use strict'
+
 /*
 
 clock = cotton.duck.objects.Canvas.setup('main')
  */
-Canvas = Class(CanvasClock, {
+this.Canvas = Class(this.CanvasClock, {
 	type: 'Canvas'
 	, $singleton: true
 
@@ -37,3 +40,5 @@ Canvas = Class(CanvasClock, {
 		console.log('canvas step')
 	}
 })
+
+}).apply(__duckCache)
