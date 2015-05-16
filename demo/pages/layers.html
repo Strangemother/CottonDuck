@@ -1,0 +1,16 @@
+ {% extends 'duck.html' %}
+
+{% block hero %}
+    <h3>Duck Point</h3>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+      <p>A basic platform for your simple canvas ideas.</p>
+    </div>
+{% endblock %}
+
+{% block footer_js %}
+    {{ super() }}
+    <script src="/js/examples/layers.js"></script>
+{% endblock %}
