@@ -1,18 +1,48 @@
+;(function(){
+	'use strict'
 
-Layer = Class(BaseClass, {
+this.Layer = Class(BaseClass, {
 	type: 'Layer'
 	, step: function(){
 		console.log('layer step')
 	}
 
+	/*
+	 the arguments are passed through to `init` accepted in same order.
+	 */
 	, constructor: function(){
-		this.data ={}
+		this.data = {};
 		this.layer.tick = this.step;
 		this.init.apply(this, arguments);
 		if(this.draw) {
 			this.layer.start()
 		}
 	}
+
+
+	, parse: function(positions, data) {
+		/*
+		Layer({})
+		Layer(NullPoint)
+		Layer([NullPoint])
+		Layer(NullPoint, {})
+		Layer([NullPoint], {})
+
+		 */
+		var locations = undefined;
+
+		if( positions !== undefined 
+			&& data === undefined)  {
+			// no data
+			data = {}
+			this.parse
+		} else if( positions === undefined 
+			&& data !== undefined ) {
+			// User purpose positions == undefined
+
+		}
+	}
+	
 	, load: function(arr, func) {
 		// load a duck set and run.
 		var map = {}
@@ -86,3 +116,6 @@ Layer = Class(BaseClass, {
 	}
 
 })
+
+}).apply(__duckCache)
+

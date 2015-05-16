@@ -1,3 +1,6 @@
+;(function(){
+	'use strict'
+
 /*
 A surface combines a single canvas object to a top level Display Objects.
 
@@ -5,7 +8,7 @@ All elements within a DisplayObject should have a step and draw method.
 These methods will be called as per request from the step and draw from the
 canvas
  */
-Surface = Class(DisplayObject, {
+this.Surface = Class(this.DisplayObject, {
 	type: 'Surface'
 	, constructor: function(canvas, name, children) {
 		if(children!= undefined) {
@@ -46,3 +49,4 @@ Surface = Class(DisplayObject, {
 // p=new cotton.duck.objects.NullPoint(10,10)
 // pp=new cotton.duck.objects.Point(p)
 // canvas.children.push(pp)
+}).apply(__duckCache)

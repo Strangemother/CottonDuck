@@ -41,4 +41,9 @@ cotton.ready(function(){
 			}
 		}
 	});
+
+	Point.options = {
+		size: Number
+		, fillStyle: undefined
+	}
 })

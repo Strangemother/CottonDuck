@@ -1,9 +1,12 @@
+;(function(){
+	'use strict'
 
+	var CanvasClock;
 	/*
 c=new cotton.duck.objects.Clock('bob')
 core.events.on('clock:bob', function(){ console.log(arguments); })
  */
-Clock = Class(BaseClass, {
+this.Clock = Class(this.BaseClass, {
 	type: 'clock'
 	, fps: 60
 	, time: 1000
@@ -65,7 +68,7 @@ Clock = Class(BaseClass, {
 	}
 });
 
-CanvasClock = Class(Clock, {
+CanvasClock = this.CanvasClock = Class(this.Clock, {
 	type: 'CanvasClock'
 	, constructor: function(canvas, time, name, start) {
 		var args = Array.prototype.slice.call(arguments, 1);
@@ -113,3 +116,5 @@ CanvasClock = Class(Clock, {
 	, step: function(context){
 	}
 })
+
+}).apply(__duckCache)

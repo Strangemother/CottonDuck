@@ -1,4 +1,9 @@
-DisplayObject = Class(Layer, {
+;(function(){
+	'use strict'
+
+	var CanvasClock = this.CanvasClock
+	
+this.DisplayObject = Class(this.Layer, {
 	type: 'DisplayObject'
 	, constructor: function(name, canvas) {
 		this.name = name;
@@ -59,3 +64,5 @@ DisplayObject = Class(Layer, {
 		return this._canvas;
 	}
 })
+
+}).apply(__duckCache)

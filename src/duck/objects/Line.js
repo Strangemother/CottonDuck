@@ -9,6 +9,7 @@ cotton.ready(function(){
 			, constructor: function(){
 				this.constructor.$super.apply(this, arguments);
 			}
+			
 			, init: function(pointA, pointB){
 				this.point = pointA
 				this.points = [pointA, pointB]
@@ -39,4 +40,11 @@ cotton.ready(function(){
 			}
 		}
 	});
+
+	Line.options = {
+		cap: ['butt', 'round', 'square']
+		, join: ['round', 'bevel', 'miter']
+		, width: Number
+		, dashOffset: Number
+	}
 })

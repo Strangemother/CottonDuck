@@ -13,6 +13,12 @@ cotton.ready(function(){
 				console.log('NullPoint', xy[0], xy[1])
 			}
 
+			/*
+			 Parse the arguments into there x/y components.
+			 [x,y]
+			 x<Number>
+			 {x:<Number>, y:<Number>
+			 */
 			, parse: function(args) {
 				// parse x y from the given object
 				var _x = 0, _y = 0;
@@ -41,6 +47,7 @@ cotton.ready(function(){
 				this.x = arr[0]
 				this.y = arr[1]
 			}
+			
 			, copy: function(){
 				return new this.constructor(this.x, this.y)
 			}
