@@ -76,9 +76,15 @@ as layers and applying those layers to a stack.
 
 	var checkAndLoad = function(name, callback){
 		if(core.duck.objects[name] === undefined) {
-			core.load.relativeLoad(script, 'objects/' + name + '.js', function() {
-				var n = name;
-				callback(n, cotton.duck.item(name))
+			(function(){
+				var self = this;
+				core.load.relativeLoad(script, 'objects/' + name + '.js', function() {
+					var n = name;
+					self.callback(n, cotton.duck.item(name))
+				})
+			}).apply({
+				callback: callback
+				, name:name
 			})
 			return false;
 		} else {

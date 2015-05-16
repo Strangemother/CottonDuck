@@ -17,7 +17,7 @@ Layer = Class(BaseClass, {
 		// load a duck set and run.
 		var map = {}
 		var self = this;
-		var checkMap = function(){
+		var checkMap = function(cb){
 			var ready = true;
 			for (var name in map) {
 				if (map.hasOwnProperty(name)) {
@@ -33,16 +33,23 @@ Layer = Class(BaseClass, {
 						map[name] = cotton.duck.objects[name];
 					}
 				}
-				func.apply(self, [map])
+				cb.apply(self, [map])
 			}
 			return ready;
 		}
 
 		for (var i = 0; i < arr.length; i++) {
-			map[arr[i]] = cotton.duck.checkAndLoad(arr[i], function(name, lib) {
-				map[name] = true
-				checkMap();
-			});
+			map[arr[i]] = (function(){
+					var self = this;
+					return cotton.duck.checkAndLoad(arr[i], function(name, lib) {
+						self.map[name] = true
+						checkMap(self.func);
+					});
+				}).apply({
+					map:map
+					, name: name
+					, func: func
+				})
 
 		};
 		return map
