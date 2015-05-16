@@ -34,6 +34,7 @@ as layers and applying those layers to a stack.
 			// adapt
 			var klass = adapter(name, arguments[1])
 			objects[name] = klass
+			return klass;
 		}
 	}
 
@@ -96,6 +97,8 @@ as layers and applying those layers to a stack.
 
 	};
 
+	var cache = {};
+
 	var main = (function(){
 
 		listen('cotton:' + config.name, function(event){
@@ -103,6 +106,7 @@ as layers and applying those layers to a stack.
 			spindle = event.detail.spindle;
 			utils 	= event.detail.utils;
 			space   = core[config.name];
+			core.cache = cache
 	 		self.core 	 = core
 	 		self.spindle = spindle
 	 		self.utils 	 = utils
@@ -118,9 +122,12 @@ as layers and applying those layers to a stack.
 
 	}).call(this);
 
+	this[config.buildCache] = cache
+	console.log('make cache')
 
 }).call(window, {
 	name: 'duck'
+	, buildCache: '__duckCache'
 	, space: true
 	, preboot: true
 });
