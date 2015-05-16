@@ -2,7 +2,7 @@
 
 {% block header_css %} 
     {{ super() }}
-    <link rel="stylesheet" type="text/css" href="css/example.css" />
+    <link rel="stylesheet" type="text/css" href="/css/example.css" />
 {% endblock %}
 
 
@@ -17,8 +17,21 @@
 
 
 {% block content %} 
-        <canvas id="main"></canvas>
- 
+    <div class="row">
+        <div class="col s3">
+            <div class="collection">    
+                <a class='collection-item active' href="/home.html">Home</a>
+                <a class='collection-item' href="/cotton.html">Cotton</a>
+                <a class='collection-item' href="/duck.html">Duck</a>
+                <a class='collection-item' href="/pages/duck-point.html">Point</a>
+                <a class='collection-item' href="/pages/duck-line.html">Line</a>
+            </div>
+        </div>
+        <div class="col s9">
+            <canvas id="main"></canvas>
+            {% block main %}{% endblock %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block footer_js %}   
@@ -35,7 +48,6 @@
 
     <script src="/src/cotton/cotton.js" data-build='true' type="text/javascript" charset="utf-8"></script>
 
-    <script src="js/spindle.js"></script>
+    <script src="/js/spindle.js"></script>
     <!-- <script src="simple.js"></script> -->
-    <script src="js/examples/layers.js"></script>
 {% endblock %}
