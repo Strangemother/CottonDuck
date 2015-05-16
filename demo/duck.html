@@ -2,7 +2,16 @@
 
 {% block header_css %}
 {{ super() }}
-<link rel="stylesheet" type="text/css" href="example.css" />
+
+<style type="text/css" media="screen">
+    #editor { 
+        position: relative;
+        width: 100%;
+        height: 300px;
+        display: none;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="/css/example.css" />
 {% endblock %}
 
 {% block hero %}
@@ -12,19 +21,32 @@
     </div>
 {% endblock %}
 
+{% block main %}
+
+<div id="editor">function foo(items) {
+    var x = "All this is syntax highlighted";
+    return x;
+}</div>
+
+{% endblock %}
+
 {% block footer_js %}
     {{ super() }}
 
-    <script src="../src/duck/duck/base.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../src/duck/duck/clock.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../src/duck/duck/layer.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../src/duck/duck/displayobject.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../src/duck/duck/canvas.js" type="text/javascript" charset="utf-8"></script>
     <script src="../src/duck/duck.js" data-build='true' type="text/javascript" charset="utf-8"></script>
-    <script src="../src/duck/duck/surface.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/duck/duck/Base.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/duck/duck/Clock.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/duck/duck/Layer.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/duck/duck/Displayobject.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/duck/duck/Canvas.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../src/duck/duck/Surface.js" type="text/javascript" charset="utf-8"></script>
 
-    <!-- <script src="../src/duck/objects/NullPoint.js" type="text/javascript" charset="utf-8"></script> -->
-    <!-- <script src="../src/duck/objects/Point.js" type="text/javascript" charset="utf-8"></script> -->
 
-    <script src="js/duck/point.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+</script>
+
 {% endblock %}
