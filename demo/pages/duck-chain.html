@@ -1,0 +1,22 @@
+{% extends 'duck.html' %}
+
+{% block hero %}
+    <h3>Line</h3>
+{% endblock %}
+
+{% block main %}
+    {{ super() }}
+    <div class="row">
+      <p>In this example we use many NullPoint's to define a Chain</p>
+    </div>
+    <div class="row">
+        <pre><code class='js'>
+cotton.ready(ready)
+</code></pre>
+    </div>
+{% endblock %}
+
+{% block footer_js %}
+    {{ super() }}
+    <script src="/js/duck/chain.js" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
