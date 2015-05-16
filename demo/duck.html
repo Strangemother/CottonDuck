@@ -1,26 +1,19 @@
-<!DOCTYPE html>
-  <html>
-  <head>
-    <title>Cotton</title>
-    <link rel="stylesheet" type="text/css" href="example.css" />
-  </head>
-  <body>
-    <div class="buttons">
+{% extends 'cotton.html' %}
+
+{% block header_css %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="example.css" />
+{% endblock %}
+
+{% block hero %}
+    <h2>Duck</h2>
+    <div class="row">
+      <blockquote>A basic platform for your simple canvas ideas.</blockquote>
     </div>
-    <div class="container">
-        <canvas id="main"></canvas>
-    </div>
+{% endblock %}
 
-    <script src="../src/duck/vendor/jsface/jsface.js" data-build='true' type="text/javascript" charset="utf-8"></script>
-    <script src="../src/cotton/vendor/it.js" data-build='true' type="text/javascript" charset="utf-8"></script>
-    <script src="../src/cotton/vendor/ljs/l.js" data-build='true' type="text/javascript" charset="utf-8"></script>
-
-    <!-- Nothing is required for basic setup of Cotton. By importing Cotton-run.js
-    Assets are imported and implemented -->
-    <script src="../src/spindle/spindle.js"></script>
-    <script src="../src/spindle/spindle-plugin.js" data-build='true' type="text/javascript" charset="utf-8"></script>
-
-    <script src="../src/cotton/cotton.js" data-build='true' type="text/javascript" charset="utf-8"></script>
+{% block footer_js %}
+    {{ super() }}
 
     <script src="../src/duck/duck/base.js" type="text/javascript" charset="utf-8"></script>
     <script src="../src/duck/duck/clock.js" type="text/javascript" charset="utf-8"></script>
@@ -33,6 +26,5 @@
     <!-- <script src="../src/duck/objects/NullPoint.js" type="text/javascript" charset="utf-8"></script> -->
     <!-- <script src="../src/duck/objects/Point.js" type="text/javascript" charset="utf-8"></script> -->
 
-    <script src="duck/point.js" type="text/javascript" charset="utf-8"></script>
-  </body>
-</html>
+    <script src="js/duck/point.js" type="text/javascript" charset="utf-8"></script>
+{% endblock %}

@@ -1,29 +1,41 @@
-<!DOCTYPE html>
-  <html>
-  <head>
-    <title>Cotton</title>
-    <link rel="stylesheet" type="text/css" href="example.css" />
-  </head>
-  <body>
-    <div class="buttons">
-    </div>
-    <div class="container">
-        <canvas id="main"></canvas>
-    </div>
+{% extends 'base.html' %}
 
-    <script src="../src/duck/vendor/jsface/jsface.js" data-build='true' type="text/javascript" charset="utf-8"></script>
-    <script src="../src/cotton/vendor/it.js" data-build='true' type="text/javascript" charset="utf-8"></script>
-    <script src="../src/cotton/vendor/ljs/l.js" data-build='true' type="text/javascript" charset="utf-8"></script>
+{% block header_css %} 
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="css/example.css" />
+{% endblock %}
+
+
+
+
+{% block hero %}
+    <h2>Cotton</h2>
+    <div class="row">
+      <blockquote>A basic platform for your simple canvas ideas.</blockquote>
+    </div>
+{% endblock %}
+
+
+{% block content %} 
+        <canvas id="main"></canvas>
+ 
+{% endblock %}
+
+{% block footer_js %}   
+    {{ super() }}
+
+    <script src="/src/duck/vendor/jsface/jsface.js" data-build='true' type="text/javascript" charset="utf-8"></script>
+    <script src="/src/cotton/vendor/it.js" data-build='true' type="text/javascript" charset="utf-8"></script>
+    <script src="/src/cotton/vendor/ljs/l.js" data-build='true' type="text/javascript" charset="utf-8"></script>
 
     <!-- Nothing is required for basic setup of Cotton. By importing Cotton-run.js
     Assets are imported and implemented -->
-    <script src="../src/spindle/spindle.js"></script>
-    <script src="../src/spindle/spindle-plugin.js" data-build='true' type="text/javascript" charset="utf-8"></script>
+    <script src="/src/spindle/spindle.js"></script>
+    <script src="/src/spindle/spindle-plugin.js" data-build='true' type="text/javascript" charset="utf-8"></script>
 
-    <script src="../src/cotton/cotton.js" data-build='true' type="text/javascript" charset="utf-8"></script>
+    <script src="/src/cotton/cotton.js" data-build='true' type="text/javascript" charset="utf-8"></script>
 
-    <script src="spindle.js"></script>
+    <script src="js/spindle.js"></script>
     <!-- <script src="simple.js"></script> -->
-    <script src="layers.js"></script>
-  </body>
-</html>
+    <script src="js/examples/layers.js"></script>
+{% endblock %}

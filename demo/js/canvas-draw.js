@@ -11,4 +11,3 @@ var draw = function(cxt) {
 cotton.ready(function(){
 	cotton.canvas.draw('main', draw)
 })
-

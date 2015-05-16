@@ -24,18 +24,19 @@ This also means lots of other fantasic features:
 Let's put a basic point on the screen.
 
     var point = function(o){
-
         var np = new o.NullPoint(10,10)
         var p = new o.Point(np)
         this.children.push(p)
     }
-
     var ready = function(){
         var canvas = new cotton.duck.objects.Surface('main')
         canvas.load(['NullPoint', 'Point'], point)
     };
-
     cotton.ready(ready)
+
+We can edit our point `p` and move it around:
+
+    p.point.x= 40;
 
 ---
 
