@@ -1,0 +1,40 @@
+{% extends 'duck.html' %}
+
+{% block hero %}
+    <h3>Line</h3>
+{% endblock %}
+
+{% block main %}
+    {{ super() }}
+    <div class="row">
+      <p>In this example we use two NullPoint's to define a Line</p>
+    </div>
+    <div class="row">
+        <pre><code class='js'>var NullPoint;
+var _p = function(x,y) {
+    return (new NullPoint(x,y));
+}
+
+var line = function(o) {
+    l = new o.Line( _p(50,50), _p(50,150) )
+    this.children.push(l)
+}
+
+var ready = function(){
+    var canvas = new cotton.duck.objects.Surface('main');
+    
+    canvas.load(['NullPoint'], function(o){
+        NullPoint = o.NullPoint;
+        canvas.load(['Line'], line);
+    });
+};
+
+cotton.ready(ready)
+</code></pre>
+    </div>
+{% endblock %}
+
+{% block footer_js %}
+    {{ super() }}
+    <script src="/js/duck/line.js" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
