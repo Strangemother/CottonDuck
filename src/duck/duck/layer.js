@@ -11,16 +11,17 @@ this.Layer = Class(BaseClass, {
 	 the arguments are passed through to `init` accepted in same order.
 	 */
 	, constructor: function(){
-		this.data = {};
 		this.layer.tick = this.step;
-		this.init.apply(this, arguments);
+		var args = this.parseArgs.apply(this, arguments);
+		var initData = this.init.apply(this, args );
+		this.data = initData || args[1];
 		if(this.draw) {
 			this.layer.start()
 		}
 	}
 
 
-	, parse: function(positions, data) {
+	, parseArgs: function(positions, data) {
 		/*
 		Layer({})
 		Layer(NullPoint)
@@ -30,17 +31,21 @@ this.Layer = Class(BaseClass, {
 
 		 */
 		var locations = undefined;
+		var config = {};
 
-		if( positions !== undefined 
-			&& data === undefined)  {
-			// no data
-			data = {}
-			this.parse
-		} else if( positions === undefined 
-			&& data !== undefined ) {
+		if( positions !== undefined ){
+			locations = positions
+			if( !it(positions).is('array') ) {
+				locations = [positions]
+			}
+		};
+
+		if( data !== undefined ) {
 			// User purpose positions == undefined
+			config = data;
+		};
 
-		}
+		return [locations, config]
 	}
 	
 	, load: function(arr, func) {
