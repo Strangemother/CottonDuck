@@ -41,14 +41,15 @@ this.DisplayObject = Class(this.Layer, {
 			return child.render(context)
 		}
 		if(child.draw) {
-			return child.data.point && child.draw.apply(child.data, [context, child.data])
+			var d = child._data || child.data;
+			return child.data.point && child.draw.apply(d, [context, d])
 		}
 	}
 
 	, stepChild: function(child, context) {
 		if(child.step !== undefined) {
 			child.data.point = child.point;
-			child.step(context, child.data)
+			child._data = child.step(context, child.data)
 		}
 	}
 
