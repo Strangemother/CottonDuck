@@ -30,15 +30,16 @@ this.Surface = Class(this.DisplayObject, {
 		};
 	}
 	, preDraw: function(context){
+		
 		var canvas = this.canvas();
-		var width = canvas.inspection.width
-		var height = canvas.inspection.height
+		var width = canvas.inspection.width;
+		var height = canvas.inspection.height;
 
-		context.clearRect(0,0, width, height)
-		context.save()
+		context.clearRect(0,0, width, height);
+		context.save();
 	}
 	, postDraw: function(context){
-		context.restore()
+		context.restore();
 	}
 	, canvas: function() {
 		return this.duckCanvas
