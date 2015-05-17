@@ -9,11 +9,12 @@ cotton.ready(function(){
 			, constructor: function(){
 				this.constructor.$super.apply(this, arguments);
 			}
-			, init: function(point){
-				this.point = point
+			, init: function(points, data){
+				this.point = points[0]
 			}
 
 			, step: function(context, data){
+				return data;
 			}
 			/**
 			 * Provided to the draaw renderer to present the values within the class.
