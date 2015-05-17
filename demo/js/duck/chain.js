@@ -10,16 +10,20 @@ var chain = function(c) {
         ;
 
     for(i=0; i<c; i++) {
-        y = x = padding * i
+        x = padding * i + (i * (2 % .9) + 10)
+        y = padding * (i * 2 % .8) + i
         arr.push( _p(x, y) )
     }
 
-    return chain;
+    return arr;
 }
 
 var line = function(o){
-    var l = new o.Line( chain(6) )
-    // this.children.push(l);
+    var l = new o.Line( chain( 26), {
+        width: 3
+    });
+
+    this.children.push(l);
 }
 
 var ready = function(){
