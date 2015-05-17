@@ -1,0 +1,20 @@
+{% extends 'duck.html' %}
+
+{% block hero %}
+    <h3>Pie</h3>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+      <p>This example presents a Pie - a circle with the ability to slice percentages</p>
+      
+    </div>
+    <div class="row">
+        <pre><code class='js'> </code></pre>
+    </div>
+{% endblock %}
+
+{% block footer_js %}
+    {{ super() }}
+    <script src="/js/duck/pie.js" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
