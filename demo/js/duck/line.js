@@ -4,7 +4,9 @@ var _p = function(x,y) {
 }
 
 var line = function(o) {
-    l = new o.Line( _p(50,50), _p(50,150) )
+    l = new o.Line( [_p(50,50), _p(50,150)] ,{
+
+    });
     this.children.push(l)
 }
 
