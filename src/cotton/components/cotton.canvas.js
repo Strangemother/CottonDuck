@@ -27,9 +27,15 @@
 	}
 
 	var calcWidth = function(canvas){
-		var inp = inspectCanvas(canvas);
-		inp.canvas.width = inp.canvas.clientWidth * inp.devicePixelRatio;
-		inp.canvas.height = inp.canvas.clientHeight * inp.devicePixelRatio;
+
+		var width = canvas.clientWidth * ( window.devicePixelRatio);
+		var height = canvas.clientHeight * ( window.devicePixelRatio);
+		canvas.width = width;
+		canvas.height = height;
+		return {
+			width: width
+			, height: height
+		}
 	}
 
 	/**
@@ -84,9 +90,9 @@
 	    ret.context.scale(dpr, dpr);
 		// this.step.start(1000, context);
 
-	    ret.width = cnv.width  * dpr;
-	    ret.height = cnv.height * dpr;
-
+	    var c = calcWidth( cnv)
+	    ret.width = c.width  * dpr;
+	    ret.height = c.height * dpr;
 	    return ret;
 	}
 
