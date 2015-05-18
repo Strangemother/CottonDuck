@@ -1,4 +1,3 @@
-console.log('NullPoint ready')
 cotton.ready(function(){
 
 	// new cotton.duck.objects.NullPoint(10,10)
@@ -11,6 +10,11 @@ cotton.ready(function(){
 				var xy = this.parse.apply(this, arguments)
 				this.setXY(xy);
 				console.log('NullPoint', xy[0], xy[1])
+			}
+
+			, step: function(context, data) {
+				//debugger;
+				this.modifiers(context, data)
 			}
 
 			/*
@@ -26,15 +30,24 @@ cotton.ready(function(){
 					var a = it(args);
 					if( a.is('array') ) {
 						// x y
-						_x= a[0]
-						_y= a[1]
+						_x= args[0]
+						_y= args[1]
 					} else if( a.is('number') ) {
 						// x
-						_x = a;
+						_x = args;
 					} else if( a.is('object') ) {
 						// x y
-						_x = a.x;
-						_y = a.y;
+						if( it(args.step).is('function') 
+							&& args.type == 'modifier' ) {
+							// active.
+							this.modifiers().add(args)
+						} else if( args.modifiers !== undefined ){
+							this.modifiers().addSet(args.modifiers)
+						} else {
+							_x = args.x;
+							_y = args.y;
+						}
+
 					}
 				} else if(arguments.length == 2) {
 					_x = arguments[0]
@@ -53,4 +66,4 @@ cotton.ready(function(){
 			}
 		}
 	});
-})
+});
