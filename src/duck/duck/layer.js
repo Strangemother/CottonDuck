@@ -1,7 +1,160 @@
 ;(function(){
 	'use strict'
 
-this.Layer = Class(BaseClass, {
+
+var _plugs = {};
+var _plugins = {};
+
+var registerGlobal = function(plugin, name){
+    var id = plugin.id();
+
+    if( !it(_plugs[ plugin.name ]).is('array') ) {
+        _plugs[ plugin.name ] = [];
+    }
+    
+    if( !it(_plugs[ name ]).is('array') ) { 
+        _plugs[ name ] = [];
+    }
+    
+    _plugs[id] = id;
+    _plugs[ plugin.name ].push( id );
+    _plugs[ name ].push( id );
+    
+    _plugins[id] = plugin;
+}
+
+var getGlobal = function(v) {
+    var id = v;
+    if( v.id !== undefined ) {
+        if( it(v.id).is('function') ) {
+            id = v.id()
+        } else {
+            id = v.id;
+        }
+    }
+
+    var plugin;
+
+    if( _plugs[id] !== undefined ) plugin = _plugs[id];
+
+    return plugin
+}
+
+var removeGlobal = function(v) {
+    var id = v;
+    if( v.id !== undefined ) {
+        if( it(v.id).is('function') ) {
+            id = v.id()
+        } else {
+            id = v.id;
+        }
+    }
+
+    if( _plugs[id] ) {
+        delete _plugs[id]
+    }
+}
+
+var ModifierMixin = Class(function(){
+    var ModScope = function(parent){
+        var self = this;
+        this.addSet = function(object) {
+        	/* Apply a list of modifiers applied by a
+        	name:plugin set. The keyname defines the
+        	targeted value to be affected by the modifier.*/
+
+        	var M = cotton.duck.item('Modifier');
+	        var m = new M();
+
+        	for(var name in object) {
+	        	var args = object[name]
+	        	m[name] = args
+        	}
+
+	        // m.setArgs.apply(m, args);
+
+        }
+
+        this.add = function(name, plugin){
+            if( !it(name).is('string') 
+                && plugin === undefined ) {
+
+                plugin = name;
+                name = plugin.name;
+            };
+
+            registerGlobal(plugin, name);
+        }
+
+        this.get = function(v) {
+            return getGlobal(v);
+        }
+
+        this.remove = function(v) {
+            var p = getGlobal(v);
+            removeGlobal(p)
+        }
+
+        this.run = function(context, data, layers) {
+        	/*
+        	 Called by the DisplayObject when a run() 
+        	 has been called from a modifier(ctx) call.
+
+        	 The provided data object is the finished product from
+        	 the Layers parent `step()`
+        	 */
+
+            // loop all modifiers
+            var id
+            	, mod
+            	, field
+            	, modCall
+            	, value
+            	;
+
+            if(layers.point)
+            layers.point.step(context, data)
+
+            for(id in _plugins) {
+            	// step.
+            	mod = _plugins[id];
+            	
+            	mod.step(context, layers, data)
+            	for(field in data) {
+            		modCall = mod[field]
+            		value = data[field];
+            		if( modCall !== undefined) {
+            			// call the matching modifier method
+            			// console.log('Calling', field)
+            			value = modCall.apply(mod, [ data[field], context, data])
+            		}
+
+            		data[field] = value;
+            	}
+            }
+
+            return data;
+        }
+    }
+
+    return {
+        modifiers: function(ctx, d) {
+            if(!this._modifiers) {
+                this._modifiers = new ModScope(this);
+            };
+
+           	if( ctx !== undefined 
+           		&& d !== undefined ) {
+           		return this._modifiers.run(ctx, d, this)
+           	}
+
+            return this._modifiers;
+        }
+    }
+
+});
+
+this.Layer = Class([BaseClass, ModifierMixin], {
 	type: 'Layer'
 	, step: function(){
 		console.log('layer step')
@@ -119,8 +272,7 @@ this.Layer = Class(BaseClass, {
 			parent.loop()
 		}
 	}
-
-})
+});
 
 }).apply(__duckCache)
 
