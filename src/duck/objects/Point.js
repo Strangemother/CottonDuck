@@ -14,6 +14,7 @@ cotton.ready(function(){
 			}
 
 			, step: function(context, data){
+				// debugger;
 				return data;
 			}
 			/**

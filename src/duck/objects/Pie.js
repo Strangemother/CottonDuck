@@ -32,7 +32,7 @@ cotton.ready(function(){
                 } else {
                     ret.inners = [];
                 }
-
+                
                 return ret;
             }
             /**
