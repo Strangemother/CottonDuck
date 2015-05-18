@@ -50,6 +50,7 @@ this.DisplayObject = Class(this.Layer, {
 		if(child.step !== undefined) {
 			child.data.point = child.point;
 			child._data = child.step(context, child.data)
+			child._data = child.modifiers(context, child._data)
 		}
 	}
 
