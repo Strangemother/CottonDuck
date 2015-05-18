@@ -28,8 +28,8 @@
 
 	var calcWidth = function(canvas){
 
-		var width = canvas.clientWidth * ( window.devicePixelRatio);
-		var height = canvas.clientHeight * ( window.devicePixelRatio);
+		var width = canvas.clientWidth * (window.devicePixelRatio);
+		var height = canvas.clientHeight * (window.devicePixelRatio);
 		canvas.width = width;
 		canvas.height = height;
 		return {
