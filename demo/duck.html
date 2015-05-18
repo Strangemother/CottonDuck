@@ -68,6 +68,7 @@ new Line(points, data);</code></pre>
     {{ super() }} 
 
     <script src="../src/duck/duck.js" data-build='true' type="text/javascript" charset="utf-8"></script>
+    <script src="../src/duck/duck/Modifiers.js" type="text/javascript" charset="utf-8"></script>
     <script src="../src/duck/duck/Base.js" type="text/javascript" charset="utf-8"></script>
     <script src="../src/duck/duck/Clock.js" type="text/javascript" charset="utf-8"></script>
     <script src="../src/duck/duck/Layer.js" type="text/javascript" charset="utf-8"></script>
@@ -78,9 +79,12 @@ new Line(points, data);</code></pre>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/javascript");
+    if( $('#editor').length > 0 ){
+
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.getSession().setMode("ace/mode/javascript");
+    }
 </script>
 
 {% endblock %}
