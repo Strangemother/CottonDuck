@@ -17,12 +17,16 @@ as layers and applying those layers to a stack.
 		console.log('Write duck');
 
 		core.duck.Duck = cache.Layer;
-		core.duck.objects.Clock = cache.Clock;
-		core.duck.objects.Layer = cache.Layer;
-		core.duck.objects.CanvasClock = cache.CanvasClock;
-		core.duck.objects.DisplayObject = cache.DisplayObject;
-		core.duck.objects.Canvas = cache.Canvas;
-		core.duck.objects.Surface = cache.Surface;
+		// core.duck.objects.Clock = cache.Clock;
+		// core.duck.objects.Layer = cache.Layer;
+		// core.duck.objects.CanvasClock = cache.CanvasClock;
+		// core.duck.objects.DisplayObject = cache.DisplayObject;
+		// core.duck.objects.Canvas = cache.Canvas;
+		// core.duck.objects.Surface = cache.Surface;
+
+		for(var name in cache) {
+			core.duck.objects[name] = cache[name]
+		}
 
 	}
 
